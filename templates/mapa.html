@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="map" data-lat="{{ lat }}" data-long="{{ long }}" data-cadena="{{ cadena }}" zoom="{{ zoom }}" altura="{{ altura }}" ancho="{{ ancho }}"></div>
+    
+    <script>
+
+         var mapElement = document.getElementById('map');
+        var lat = parseFloat(mapElement.getAttribute('data-lat'));
+        var long = parseFloat(mapElement.getAttribute('data-long'));
+        var cadena = mapElement.getAttribute('data-cadena');
+        var zoom = parseInt(mapElement.getAttribute('zoom'));
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var alturaParam = mapElement.getAttribute('altura');
+        var anchoParam = mapElement.getAttribute('ancho');
+        var altura = alturaParam ? parseInt(alturaParam) : 500; 
+        var ancho = anchoParam ? parseInt(anchoParam) : 500; 
+        mapElement.style.height = altura + 'px';
+        mapElement.style.width = ancho + 'px';
+        var map = L.map('map').setView([lat, long], 13);
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: zoom,
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var marker = L.marker([lat, long]).addTo(map)
+            .bindPopup(cadena).openPopup();
+    </script>
+</body>
+</html>
